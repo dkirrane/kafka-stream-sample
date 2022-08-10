@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+
+kafka:
+  serviceUri: public-kafka-sample-avaya-d337.aivencloud.com:25624
+  username: avnadmin
+  password: AVNS_vobfTj-c6g11CTMsoLz
+  schemaRegistryUri: https://avnadmin:AVNS_vobfTj-c6g11CTMsoLz@public-kafka-sample-avaya-d337.aivencloud.com:25615
+
+app:
+  inputTopic: input-topic
+  outputTopic: output-topic
