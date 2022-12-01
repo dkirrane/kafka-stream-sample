@@ -15,7 +15,19 @@ When KStreams instances rebalance they never recover.
 
 ```
 
-# 2. Run Kafka stream instances (kafka-stream-sample)
+# 2. Set App config
+```bash
+
+# Update application.yaml for both kafka-stream-sample && kafka-producer-sample applications
+kafka:
+  serviceUri: XXXXX
+  username: XXXXX
+  password: XXXXX
+  schemaRegistryUri: XXXXX
+
+```
+
+# 3. Run Kafka stream instances (kafka-stream-sample)
 ```bash
 
 # Terminal 1
@@ -29,7 +41,7 @@ mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8083"
 
 ```
 
-# 3. Run Kafka Producer (kafka-producer-sample)
+# 4. Run Kafka Producer (kafka-producer-sample)
 ```bash
 
 # Terminal 4
@@ -37,7 +49,7 @@ mvn spring-boot:run
 
 ```
 
-# 4. Upgrade Aiven Kafka e.g. change service plan to trigger rolling VM upgrade
+# 5. Upgrade Aiven Kafka e.g. change service plan to trigger rolling VM upgrade
 ```bash
 
 # Upgrade Aiven Kafka service Plan
@@ -45,13 +57,13 @@ mvn spring-boot:run
 
 ```
 
-# 5. Wait for Aiven Kafka Service to go from REBALANCING -> REBUILDING -> RUNNING
+# 6. Wait for Aiven Kafka Service to go from REBALANCING -> REBUILDING -> RUNNING
 This can be slow.
 
-# 6. Verify
+# 7. Verify
 Verify the Producer & Streams app instances. They should continue to produce/consume as normal during & after the Aiven Kafka Service upgrade.
 
-# 7. Trigger a Rebalance by Running a new Kafka stream instance (kafka-stream-sample)
+# 8. Trigger a Rebalance by Running a new Kafka stream instance (kafka-stream-sample)
 ```bash
 
 # Terminal 5
@@ -63,16 +75,16 @@ mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8084"
 # 2022-12-01 | 13:40:22.592 |  INFO | kstream-sample-63e9867a-2747-48e9-8890-62579c4a1a4f-StreamThread-1                                   | o.apache.kafka.clients.consumer.internals.SubscriptionState  | [Consumer clientId=kstream-sample-63e9867a-2747-48e9-8890-62579c4a1a4f-StreamThread-1-restore-consumer, groupId=null] Seeking to EARLIEST offset of partition kstream-sample-sampleStateStore-changelog-3
 ```
 
-# 8. Issue T-5AHCQ
+# 9. Issue T-5AHCQ
 - The KStream instances will State transition from RUNNING to REBALANCING
-- The new KStream instance from step 7 above will work.
-- The existing KStream instances from step 2 above will no longer consume messages. They stay in this state and never recover.
+- The new KStream instance from step 8 above will work.
+- The existing KStream instances from step 3 above will no longer consume messages. They stay in this state and never recover.
 - The only workaround found to-date was to restart the existing KStream instances.
 
-# 9. KStream Logs
-In the logs
+# 10. Logs
+In existing KStream instances you will see logs:
 
-- After Triggering KStream Rebalance you will see all instances e.g.
+- After Triggering KStream Rebalance  e.g.
 `State transition from RUNNING to PARTITIONS_ASSIGNED`
 
 - Restore Consumer Thread subscribes to changelog topic e.g.
@@ -81,7 +93,11 @@ In the logs
 - StoreChangelogReader stuck in Restoration in progress e.g.
 `o.a.kafka.streams.processor.internals.StoreChangelogReader   | stream-thread [kstream-sample-...-StreamThread-1] Restoration in progress for X partitions`
 
-# 9. Cleanup
+- Check logs for restore-consumer connection only (requires DEBUG logs for org.apache.kafka.clients.NetworkClient)
+`.*restore-consumer.*Initiating connection to node.*`
+
+
+# 11. Cleanup
 ```bash
 
 # Delete Aiven Kafka service

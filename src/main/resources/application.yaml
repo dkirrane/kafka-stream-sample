@@ -1,20 +1,26 @@
 spring:
   application:
-    name: "kstream-sample"
+    name: kstream-sample
 server:
   port: 8081
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS} | %5level | %-100.100thread | %-60.60logger{60} | %m%n"
+    file: "%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS} | %5level | %-100.100thread | %-60.60logger{60} | %m%n"
+  file:
+    name: ./logs/${spring.application.name}-${server.port}.log
 
 ---
 spring:
   config:
     activate:
-      on-profile: "dev"
+      on-profile: dev
 
 kafka:
   serviceUri: public-kstreams-issue-avaya-d337.aivencloud.com:25624
   username: avnadmin
-  password: AVNS_zXgiM9f7u2TB1WqA2T3
-  schemaRegistryUri: https://avnadmin:AVNS_zXgiM9f7u2TB1WqA2T3@public-kstreams-issue-avaya-d337.aivencloud.com:25615
+  password: AVNS_QgUtBa36nIKSY2WGXS-
+  schemaRegistryUri: https://avnadmin:AVNS_QgUtBa36nIKSY2WGXS-@public-kstreams-issue-avaya-d337.aivencloud.com:25615
 
 app:
   inputTopic: input-topic
