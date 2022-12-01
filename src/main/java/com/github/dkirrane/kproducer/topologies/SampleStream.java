@@ -27,6 +27,12 @@ public class SampleStream {
 
     public static String SASL_JAAS_TEMPLATE = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
 
+    @Value("${spring.application.name}")
+    private String appName;
+
+    @Value("${server.port}")
+    private int serverPort;
+
     @Value( "${kafka.serviceUri}" )
     private String serviceUri;
 
@@ -52,7 +58,7 @@ public class SampleStream {
 //            TlsUtil.addCertificate(kafkaSecrets.getCaCert());
 //        }
 
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "kafka-stream-sample");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, appName);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, serviceUri);
 
         props.put(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG, ClientDnsLookup.USE_ALL_DNS_IPS.toString());
@@ -80,7 +86,7 @@ public class SampleStream {
 
         props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, "60000");
 
-        props.put(StreamsConfig.STATE_DIR_CONFIG, "C:\\temp");
+        props.put(StreamsConfig.STATE_DIR_CONFIG, String.format("./temp/%s%s", appName, serverPort));
 
         return props;
     }

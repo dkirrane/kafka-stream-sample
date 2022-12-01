@@ -1,17 +1,20 @@
 #!/bin/bash
 set -e
+# set -euxo pipefail
 
 # Switch to Aiven project
 avn project switch avaya-d337
 
-SERVICE_NAME="kafka-sample"
+# T-5AHCQ - Kafka Streams restore consumer DNS issue on Aiven Kafka cluster rolling upgrades
+SERVICE_NAME="kstreams-issue"
 
 # Create Kafka service
-avn service create ${SERVICE_NAME} \
+avn service create \
     --service-type kafka \
     --cloud azure-westeurope \
     --plan startup-2 \
-    --no-fail-if-exists
+    --no-fail-if-exists \
+    ${SERVICE_NAME}
 
 # Wait for Kafka service to reach the RUNNING state
 avn service wait ${SERVICE_NAME}
@@ -26,7 +29,7 @@ avn service update ${SERVICE_NAME} \
 # Get CA and add to Truststore
 avn service user-creds-download --username avnadmin -d ./creds ${SERVICE_NAME}
 # sudo keytool -delete -trustcacerts -cacerts -storepass changeit -noprompt -alias aiven
-sudo keytool -importcert -v -trustcacerts -cacerts -storepass changeit -noprompt -alias aiven -file ./creds/ca.pem
+# sudo keytool -importcert -v -trustcacerts -cacerts -storepass changeit -noprompt -alias aiven -file ./creds/ca.pem
 
 # Get credentials and update application.yaml of apps below
 SVC_HOST=$( avn service get ${SERVICE_NAME} --json | jq -r '.components[] | select(.route=="public" and .component=="kafka" and .kafka_authentication_method=="sasl").host' )

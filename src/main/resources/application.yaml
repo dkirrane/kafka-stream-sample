@@ -1,3 +1,6 @@
+spring:
+  application:
+    name: "kstream-sample"
 server:
   port: 8081
 
@@ -8,10 +11,10 @@ spring:
       on-profile: "dev"
 
 kafka:
-  serviceUri: public-kafka-sample-avaya-d337.aivencloud.com:25624
+  serviceUri: public-kstreams-issue-avaya-d337.aivencloud.com:25624
   username: avnadmin
-  password: AVNS_vobfTj-c6g11CTMsoLz
-  schemaRegistryUri: https://avnadmin:AVNS_vobfTj-c6g11CTMsoLz@public-kafka-sample-avaya-d337.aivencloud.com:25615
+  password: AVNS_zXgiM9f7u2TB1WqA2T3
+  schemaRegistryUri: https://avnadmin:AVNS_zXgiM9f7u2TB1WqA2T3@public-kstreams-issue-avaya-d337.aivencloud.com:25615
 
 app:
   inputTopic: input-topic
