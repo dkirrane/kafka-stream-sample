@@ -1,8 +1,11 @@
 # kafka-stream-sample
 
-# Reproduce
+# Summary
 [Aiven] [HIGH] Support ticket T-5AHCQ created: https://issues.apache.org/jira/browse/KAFKA-13467
-Kafka Streams restore consumer DNS issue on Aiven Kafka cluster rolling upgrades
+
+Kafka Streams don't work with Aiven Kafka.
+Restore consumer has DNS issues after a Aiven Kafka cluster rolling upgrade.
+When KStreams instances rebalance they never recover.
 
 # 1. Setup
 ```bash
