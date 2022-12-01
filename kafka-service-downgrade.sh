@@ -10,7 +10,7 @@ SERVICE_NAME="kstreams-issue"
 
 # Downgrade Kafka Service Plan
 avn service update \
-    --plan startup-2
+    --plan startup-2 \
     ${SERVICE_NAME}
 
 # Wait for Kafka service to reach the RUNNING state
