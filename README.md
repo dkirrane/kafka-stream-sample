@@ -67,12 +67,8 @@ Verify the Producer & Streams app instances. They should continue to produce/con
 ```bash
 
 # Terminal 5
-mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8084"
+mvn spring-boot:run -Dspring-boot.run.profiles="aiven" -Dspring-boot.run.arguments="--server.port=8084"
 
-# State transition from RUNNING to PARTITIONS_ASSIGNED
-# 2022-12-01 | 13:40:18.285 |  INFO | kstream-sample-b5f9da3e-c78c-4c2e-8af6-c5a5fd32022e-StreamThread-1                                   | org.apache.kafka.streams.processor.internals.StreamThread    | stream-thread [kstream-sample-b5f9da3e-c78c-4c2e-8af6-c5a5fd32022e-StreamThread-1] State transition from RUNNING to PARTITIONS_ASSIGNED
-# stream-client [kstream-sample-b5f9da3e-c78c-4c2e-8af6-c5a5fd32022e] State transition from RUNNING to REBALANCING
-# 2022-12-01 | 13:40:22.592 |  INFO | kstream-sample-63e9867a-2747-48e9-8890-62579c4a1a4f-StreamThread-1                                   | o.apache.kafka.clients.consumer.internals.SubscriptionState  | [Consumer clientId=kstream-sample-63e9867a-2747-48e9-8890-62579c4a1a4f-StreamThread-1-restore-consumer, groupId=null] Seeking to EARLIEST offset of partition kstream-sample-sampleStateStore-changelog-3
 ```
 
 # 9. Issue T-5AHCQ
