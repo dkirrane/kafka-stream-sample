@@ -11,7 +11,7 @@
     </root>
 
     <logger name="org.springframework.web" level="WARN" />
-    <logger name="com.dkirrane" level="INFO" />
+    <logger name="com.github.dkirrane" level="INFO" />
     <logger name="org.apache.kafka" level="INFO" />
     <logger name="org.apache.kafka.clients.NetworkClient" level="DEBUG" />
 
