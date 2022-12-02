@@ -10,18 +10,12 @@ logging:
   file:
     name: ./logs/${spring.application.name}-${server.port}.log
 
----
-spring:
-  config:
-    activate:
-      on-profile: dev
-
-kafka:
-  serviceUri: public-kstreams-issue-avaya-d337.aivencloud.com:25624
-  username: avnadmin
-  password: AVNS_QgUtBa36nIKSY2WGXS-
-  schemaRegistryUri: https://avnadmin:AVNS_QgUtBa36nIKSY2WGXS-@public-kstreams-issue-avaya-d337.aivencloud.com:25615
-
 app:
   inputTopic: input-topic
   outputTopic: output-topic
+
+kafka:
+  serviceUri: XXXXX
+  username: XXXXX
+  password: XXXXX
+  schemaRegistryUri: XXXXX

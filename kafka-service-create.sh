@@ -2,6 +2,8 @@
 set -e
 # set -euxo pipefail
 
+SCRIPT_PATH="$(dirname -- "${BASH_SOURCE[0]}")"
+
 # Switch to Aiven project
 avn project switch avaya-d337
 
@@ -41,13 +43,23 @@ SVC_PASSWORD=$( avn service user-get ${SERVICE_NAME} --username avnadmin --json 
 SR_HOST=$( avn service get ${SERVICE_NAME} --json | jq -r '.components[] | select(.route=="public" and .component=="schema_registry").host' )
 SR_PORT=$( avn service get ${SERVICE_NAME} --json | jq -r '.components[] | select(.route=="public" and .component=="schema_registry").port' )
 
-printf "\n\nAdd the following to the SpringBoot application.yaml\n\n"
+printf "\n\nOutput SpringBoot application-aiven.yaml\n\n"
 
-printf "kafka:\n"
-printf "  serviceUri: %s:%s\n" ${SVC_HOST} ${SVC_PORT}
-printf "  username: %s\n" ${SVC_USERNAME}
-printf "  password: %s\n" ${SVC_PASSWORD}
-printf "  schemaRegistryUri: https://%s:%s@%s:%s\n" ${SVC_USERNAME} ${SVC_PASSWORD} ${SR_HOST} ${SR_PORT}
+KSTREAM_CONFIG="${SCRIPT_PATH}/src/main/resources/application-aiven.yaml"
+printf "kafka:\n" > ${KSTREAM_CONFIG}
+printf "  serviceUri: %s:%s\n" ${SVC_HOST} ${SVC_PORT} >> ${KSTREAM_CONFIG}
+printf "  username: %s\n" ${SVC_USERNAME} >> ${KSTREAM_CONFIG}
+printf "  password: %s\n" ${SVC_PASSWORD} >> ${KSTREAM_CONFIG}
+printf "  schemaRegistryUri: https://%s:%s@%s:%s\n" ${SVC_USERNAME} ${SVC_PASSWORD} ${SR_HOST} ${SR_PORT} >> ${KSTREAM_CONFIG}
+
+printf "\n\n"
+
+PRODUCER_CONFIG="${SCRIPT_PATH}/../kafka-producer-sample/src/main/resources/application-aiven.yaml"
+printf "kafka:\n" > ${PRODUCER_CONFIG}
+printf "  serviceUri: %s:%s\n" ${SVC_HOST} ${SVC_PORT} >> ${PRODUCER_CONFIG}
+printf "  username: %s\n" ${SVC_USERNAME} >> ${PRODUCER_CONFIG}
+printf "  password: %s\n" ${SVC_PASSWORD} >> ${PRODUCER_CONFIG}
+printf "  schemaRegistryUri: https://%s:%s@%s:%s\n" ${SVC_USERNAME} ${SVC_PASSWORD} ${SR_HOST} ${SR_PORT} >> ${PRODUCER_CONFIG}
 
 printf "\n\n"
 

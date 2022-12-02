@@ -189,3 +189,4 @@ Ctemp/
 creds/
 C/
 temp/
+src/main/resources/application-aiven.yaml

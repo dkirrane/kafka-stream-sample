@@ -31,13 +31,13 @@ kafka:
 ```bash
 
 # Terminal 1
-mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8081"
+mvn spring-boot:run -Dspring-boot.run.profiles="aiven" -Dspring-boot.run.arguments="--server.port=8081"
 
 # Terminal 2
-mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8082"
+mvn spring-boot:run -Dspring-boot.run.profiles="aiven" -Dspring-boot.run.arguments="--server.port=8082"
 
 # Terminal 3
-mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8083"
+mvn spring-boot:run -Dspring-boot.run.profiles="aiven" -Dspring-boot.run.arguments="--server.port=8083"
 
 ```
 
@@ -45,7 +45,7 @@ mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8083"
 ```bash
 
 # Terminal 4
-mvn spring-boot:run
+mvn spring-boot:run -Dspring-boot.run.profiles="aiven"
 
 ```
 
