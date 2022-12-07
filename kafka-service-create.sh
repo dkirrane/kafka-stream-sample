@@ -82,15 +82,6 @@ avn service topic-create ${SERVICE_NAME} output-topic \
     --cleanup-policy compact
 
 
-# List Service IPs
-# avn service show ${SERVICE_NAME} output-topic
-avn service topic-create ${SERVICE_NAME} output-topic \
-    --partitions 5 \
-    --replication 2 \
-    --retention 2 \
-    --cleanup-policy compact
-
-
 # Print IPs
 printf "\n\nKafka Private IPS:\n"
 avn service get --json \
