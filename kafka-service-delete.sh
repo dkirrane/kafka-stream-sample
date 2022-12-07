@@ -1,11 +1,11 @@
 #!/bin/bash
 set -euxo pipefail
 
-# Switch to Aiven project
-avn project switch avaya-d337
+set -a; source .env; set +a
+SCRIPT_PATH="$(dirname -- "${BASH_SOURCE[0]}")"
 
-# T-5AHCQ - Kafka Streams restore consumer DNS issue on Aiven Kafka cluster rolling upgrades
-SERVICE_NAME="kstreams-issue"
+# Switch to Aiven project
+avn project switch ${PROJECT_NAME}
 
 # Create Kafka service
 avn service terminate ${SERVICE_NAME}

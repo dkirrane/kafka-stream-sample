@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Properties;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -58,16 +59,25 @@ public class SampleStream {
 //            TlsUtil.addCertificate(kafkaSecrets.getCaCert());
 //        }
 
+         /* Set the JVM TTL in case that solves the Aiven DNS cache issue */
+        java.security.Security.setProperty("networkaddress.cache.ttl" , "5");
+
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, appName);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, serviceUri);
 
-        props.put(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG, ClientDnsLookup.USE_ALL_DNS_IPS.toString());
-//        props.put(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG, ClientDnsLookup.RESOLVE_CANONICAL_BOOTSTRAP_SERVERS_ONLY);
+        /* Set admin DNS lookup strategy */
+//        props.put(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG, ClientDnsLookup.USE_ALL_DNS_IPS.toString());
+        props.put(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG, ClientDnsLookup.RESOLVE_CANONICAL_BOOTSTRAP_SERVERS_ONLY.toString());
 
+        /* Set consumer DNS lookup strategy */
         props.put(CommonClientConfigs.METADATA_MAX_AGE_CONFIG, 500);
-        props.put(StreamsConfig.consumerPrefix(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG), ClientDnsLookup.USE_ALL_DNS_IPS.toString());
+//        props.put(StreamsConfig.consumerPrefix(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG), ClientDnsLookup.USE_ALL_DNS_IPS.toString());
+        props.put(StreamsConfig.consumerPrefix(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG), ClientDnsLookup.RESOLVE_CANONICAL_BOOTSTRAP_SERVERS_ONLY.toString());
         props.put(StreamsConfig.consumerPrefix(CommonClientConfigs.METADATA_MAX_AGE_CONFIG), 500);
-        props.put(StreamsConfig.restoreConsumerPrefix(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG), ClientDnsLookup.USE_ALL_DNS_IPS.toString());
+
+        /* Set restore-consumer DNS lookup strategy */
+//        props.put(StreamsConfig.restoreConsumerPrefix(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG), ClientDnsLookup.USE_ALL_DNS_IPS.toString());
+        props.put(StreamsConfig.restoreConsumerPrefix(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG), ClientDnsLookup.RESOLVE_CANONICAL_BOOTSTRAP_SERVERS_ONLY.toString());
         props.put(StreamsConfig.restoreConsumerPrefix(CommonClientConfigs.METADATA_MAX_AGE_CONFIG), 500);
 
         props.put(StreamsConfig.SECURITY_PROTOCOL_CONFIG, SecurityProtocol.SASL_SSL.name);
@@ -86,7 +96,7 @@ public class SampleStream {
 
         props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, "60000");
 
-        props.put(StreamsConfig.STATE_DIR_CONFIG, String.format("./temp/%s%s", appName, serverPort));
+        props.put(StreamsConfig.STATE_DIR_CONFIG, String.format("./stateDir/%s%s", appName, serverPort));
 
         return props;
     }

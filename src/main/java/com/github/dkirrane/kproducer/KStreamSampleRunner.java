@@ -6,6 +6,7 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsMetadata;
 import org.apache.kafka.streams.ThreadMetadata;
 import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,8 +53,18 @@ public class KStreamSampleRunner {
         log.info("SampleStream config: \n{}", streamProps);
         KafkaStreams stream = new KafkaStreams(topology, streamProps);
 
+        stream.setUncaughtExceptionHandler(new StreamsUncaughtExceptionHandler() {
+            @Override
+            public StreamThreadExceptionResponse handle(Throwable exception) {
+                log.error("StreamsUncaughtExceptionHandler", exception);
+                return StreamThreadExceptionResponse.SHUTDOWN_CLIENT;
+            }
+        });
+
         stream.start();
         log.info("SampleStream has started [{}] ", stream.state());
+
+
 
         final Set<ThreadMetadata> threadMetadata = stream.metadataForLocalThreads();
         for (ThreadMetadata threadMetadatum : threadMetadata) {

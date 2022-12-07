@@ -8,16 +8,6 @@ SCRIPT_PATH="$(dirname -- "${BASH_SOURCE[0]}")"
 # Switch to Aiven project
 avn project switch ${PROJECT_NAME}
 
-# Downgrade Kafka Service Plan
-avn service update \
-    --plan business-4 \
-    ${SERVICE_NAME}
-
-sleep 5
-
-# Wait for Kafka service to reach the RUNNING state
-avn service wait ${SERVICE_NAME}
-
 # Print IPs
 IPS_LOG="${SCRIPT_PATH}/logs/ips.log"
 

@@ -10,9 +10,11 @@
         <appender-ref ref="FILE" />
     </root>
 
-    <logger name="org.springframework.web" level="WARN" />
+<!--    <logger name="org.springframework.web" level="WARN" />-->
     <logger name="com.github.dkirrane" level="INFO" />
-    <logger name="org.apache.kafka" level="INFO" />
-    <logger name="org.apache.kafka.clients.NetworkClient" level="DEBUG" />
+    <logger name="org.apache.kafka" level="WARN" />
+<!--    <logger name="org.apache.kafka.clients.NetworkClient" level="INFO" />-->
+<!--    <logger name="org.apache.kafka.streams.processor.internals.StoreChangelogReader" level="DEBUG"/>-->
 
+    log4j.logger.kafka.server.MetadataCache=DEBUG
 </configuration>

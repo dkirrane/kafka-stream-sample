@@ -2,19 +2,21 @@
 set -e
 # set -euxo pipefail
 
+set -a; source .env; set +a
 SCRIPT_PATH="$(dirname -- "${BASH_SOURCE[0]}")"
 
-# Switch to Aiven project
-avn project switch avaya-d337
+# Cleanup
+rm -Rf ${SCRIPT_PATH}/logs
+rm -Rf ${SCRIPT_PATH}/stateDir
 
-# T-5AHCQ - Kafka Streams restore consumer DNS issue on Aiven Kafka cluster rolling upgrades
-SERVICE_NAME="kstreams-issue"
+# Switch to Aiven project
+avn project switch ${PROJECT_NAME}
 
 # Create Kafka service
 avn service create \
     --service-type kafka \
     --cloud azure-westeurope \
-    --plan startup-2 \
+    --plan business-4 \
     --no-fail-if-exists \
     ${SERVICE_NAME}
 
@@ -78,3 +80,22 @@ avn service topic-create ${SERVICE_NAME} output-topic \
     --replication 2 \
     --retention 2 \
     --cleanup-policy compact
+
+
+# List Service IPs
+# avn service show ${SERVICE_NAME} output-topic
+avn service topic-create ${SERVICE_NAME} output-topic \
+    --partitions 5 \
+    --replication 2 \
+    --retention 2 \
+    --cleanup-policy compact
+
+
+# Print IPs
+printf "\n\nKafka Private IPS:\n"
+avn service get --json \
+    ${SERVICE_NAME} | jq '.connection_info.kafka'
+
+printf "\n\nKafka Public IPS:\n"
+SVC_HOST=$( avn service get ${SERVICE_NAME} --json | jq -r '.components[] | select(.route=="public" and .component=="kafka" and .kafka_authentication_method=="sasl").host' )
+getent hosts ${SVC_HOST}
