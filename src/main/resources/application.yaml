@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: kstream-sample
+server:
+  port: 8081
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS} | %5level | %-100.100thread | %-60.60logger{60} | %m%n"
+    file: "%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS} | %5level | %-100.100thread | %-60.60logger{60} | %m%n"
+  file:
+    name: ./logs/${spring.application.name}-${server.port}.log
+  logback:
+    rollingpolicy:
+      clean-history-on-start: true
+      file-name-pattern: ${spring.application.name}-${server.port}.%d{yyyy-MM-dd}.%i.log
+      max-file-size: 100MB
+      max-history: 20
+
+app:
+  inputTopic: input-topic
+  outputTopic: output-topic
+
+kafka:
+  serviceUri: XXXXX
+  username: XXXXX
+  password: XXXXX
+  schemaRegistryUri: XXXXX
