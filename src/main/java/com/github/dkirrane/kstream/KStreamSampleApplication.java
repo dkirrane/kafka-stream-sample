@@ -1,4 +1,4 @@
-package com.github.dkirrane.kproducer;
+package com.github.dkirrane.kstream;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

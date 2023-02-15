@@ -2,7 +2,7 @@ spring:
   application:
     name: kstream-sample
 server:
-  port: 8081
+  port: 8080
 logging:
   pattern:
     console: "%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS} | %5level | %-100.100thread | %-60.60logger{60} | %m%n"

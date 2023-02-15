@@ -1,5 +1,6 @@
-package com.github.dkirrane.kproducer.topologies;
+package com.github.dkirrane.kstream.topologies;
 
+import com.github.dkirrane.kstream.errors.StreamsErrorHandling;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.ClientDnsLookup;
@@ -87,6 +88,9 @@ public class SampleStream {
 
         props.put(StreamsConfig.STATE_DIR_CONFIG, String.format("./stateDir/%s%s", appName, serverPort));
 
+        props.put(StreamsConfig.DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG, StreamsErrorHandling.StreamsDeserializationErrorHandler.class.getName());
+        props.put(StreamsConfig.DEFAULT_PRODUCTION_EXCEPTION_HANDLER_CLASS_CONFIG, StreamsErrorHandling.StreamsRecordProducerErrorHandler.class.getName());
+
         return props;
     }
 
@@ -118,7 +122,7 @@ public class SampleStream {
                         if (context.getStateStore(storeName) == null) {
                             throw new AssertionError("State stores are not accessible: " + storeName);
                         }
-                        this.stateStore = (KeyValueStore<String, String>) this.context.getStateStore(storeName);
+                        this.stateStore = this.context.getStateStore(storeName);
                     }
 
                     @Override
