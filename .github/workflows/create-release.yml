@@ -37,5 +37,7 @@ jobs:
 
       - name: Create new release branch
         run: |
-          git checkout -b release-${{ steps.tagDryRun.outputs.new_tag }}
-          git push -u origin release-${{ steps.tagDryRun.outputs.new_tag }}
+          NEW_RELEASE_BRANCH=release-${{ steps.tagDryRun.outputs.new_tag }}
+          echo "Creating new release branch: $NEW_RELEASE_BRANCH"
+          git checkout -b ${NEW_RELEASE_BRANCH}
+          git push -u origin ${NEW_RELEASE_BRANCH}
