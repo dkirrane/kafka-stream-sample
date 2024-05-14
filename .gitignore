@@ -193,3 +193,4 @@ src/main/resources/application-aiven.yaml
 logs/
 stateDir/
 .run/KStreamSampleApplication.run.xml
+run.sh
