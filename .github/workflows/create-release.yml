@@ -18,7 +18,8 @@ jobs:
           mkdir -p ~/bin
           curl -L https://github.com/fsaintjacques/semver-tool/archive/3.4.0.tar.gz | tar xz -C ~/bin
           wget -O ~/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
-          echo "~/bin" >> $GITHUB_PATH
+          chmod +x ~bin/semver
+          echo "~bin/" >> $GITHUB_PATH
 
       - name: Get next release branch
         id: new_branch
