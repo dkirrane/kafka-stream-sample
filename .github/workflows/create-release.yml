@@ -1,0 +1,39 @@
+name: Create Release Branch
+
+on:
+  workflow_dispatch:
+
+jobs:
+  increment-semver-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: GitHub Slug
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Get latest release branch
+        id: latest-release-branch
+        run: |
+          LATEST_RELEASE_BRANCH=$(git branch -r | grep 'origin/release-' | sort -V | tail -n 1 | sed 's/origin\///')
+          echo "Latest release branch: $LATEST_RELEASE_BRANCH"
+          echo "::set-output name=branch::${LATEST_RELEASE_BRANCH}"
+
+      - name: Increment semver and create new branch
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DEFAULT_BUMP: patch
+          DRY_RUN: true
+        with:
+          tag_prefix: ${{ steps.latest-release-branch.outputs.branch }}
+
+      - name: echo new tag
+        run: |
+          echo "The current tag is: ${{ steps.tagDryRun.outputs.tag }}"
+          echo "The new tag is:     ${{ steps.tagDryRun.outputs.new_tag }}"          
