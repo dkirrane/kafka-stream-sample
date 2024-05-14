@@ -40,4 +40,4 @@ jobs:
           echo "Creating new release branch: ${NEW_RELEASE_BRANCH}"
           git checkout -b ${NEW_RELEASE_BRANCH}
           git push -u origin ${NEW_RELEASE_BRANCH}
-          echo "Created new release branch `${NEW_RELEASE_BRANCH}`" >> $GITHUB_STEP_SUMMARY
+          echo "Created new release branch \`${NEW_RELEASE_BRANCH}\`" >> $GITHUB_STEP_SUMMARY
