@@ -15,8 +15,7 @@ jobs:
 
       - name: Install semver-tool
         run: |
-          mkdir -p $HOME/.local/bin
-          curl -L https://github.com/fsaintjacques/semver-tool/archive/3.4.0.tar.gz | tar xz -C ~/bin
+          mkdir -p $HOME/.local/bin/
           wget -O $HOME/.local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
           chmod +x $HOME/.local/bin/semver
           echo "$HOME/.local/bin/" >> $GITHUB_PATH
