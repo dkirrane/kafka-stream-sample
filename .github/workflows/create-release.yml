@@ -13,31 +13,30 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get latest release branch
-        id: latest-release-branch
+      - name: Install semver-tool
         run: |
-          LATEST_RELEASE_BRANCH=$(git branch -r | grep 'origin/release-' | sort -V | tail -n 1 | sed 's/origin\///')
-          echo "Latest release branch: $LATEST_RELEASE_BRANCH"
-          echo "::set-output name=branch::${LATEST_RELEASE_BRANCH}"
+          mkdir -p ~/bin
+          curl -L https://github.com/fsaintjacques/semver-tool/archive/3.4.0.tar.gz | tar xz -C ~/bin
+          wget -O ~/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
+          echo "~/bin" >> $GITHUB_PATH
 
-      - name: Increment semver and create new branch
-        uses: anothrNick/github-tag-action@1.67.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-          DEFAULT_BUMP: patch
-          DRY_RUN: true
-        with:
-          tag_prefix: ${{ steps.latest-release-branch.outputs.branch }}
-
-      - name: echo new tag
+      - name: Get next release branch
+        id: new_branch
         run: |
-          echo "The current tag is: ${{ steps.tagDryRun.outputs.tag }}"
-          echo "The new tag is:     ${{ steps.tagDryRun.outputs.new_tag }}"
+          LATEST_RELEASE_VERSION=$(git branch -r | grep 'origin/release-' | sort -V | tail -n 1 | sed 's/origin\///')
+          if [ -z "$LATEST_RELEASE_VERSION" ]; then
+            echo "No release-* branch found."
+            NEXT_RELEASE_VERSION="0.0.0"
+          else
+            echo "Latest release version: $LATEST_RELEASE_VERSION"
+            NEXT_RELEASE_VERSION=$(semver -i patch $LATEST_RELEASE_VERSION)
+          fi
+          echo "Next release version: $NEXT_RELEASE_VERSION"
+          echo "branch=release-${NEXT_RELEASE_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Create new release branch
         run: |
-          NEW_RELEASE_BRANCH=release-${{ steps.tagDryRun.outputs.new_tag }}
+          NEW_RELEASE_BRANCH=release-${{ steps.new_branch.outputs.branch }}
           echo "Creating new release branch: $NEW_RELEASE_BRANCH"
           git checkout -b ${NEW_RELEASE_BRANCH}
           git push -u origin ${NEW_RELEASE_BRANCH}
