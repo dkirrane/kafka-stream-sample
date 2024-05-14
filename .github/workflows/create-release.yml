@@ -32,11 +32,12 @@ jobs:
             NEXT_RELEASE_VERSION=$(semver -i patch $LATEST_RELEASE_VERSION)
           fi
           echo "Next release version: $NEXT_RELEASE_VERSION"
-          echo "branch=release-${NEXT_RELEASE_VERSION}" >> $GITHUB_OUTPUT
+          echo "next_version=${NEXT_RELEASE_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Create new release branch
         run: |
-          NEW_RELEASE_BRANCH=release-${{ steps.new_branch.outputs.branch }}
+          NEW_RELEASE_BRANCH=release-${{ steps.new_branch.outputs.next_version }}
           echo "Creating new release branch: $NEW_RELEASE_BRANCH"
           git checkout -b ${NEW_RELEASE_BRANCH}
           git push -u origin ${NEW_RELEASE_BRANCH}
+          echo "Created new release branch `${NEW_RELEASE_BRANCH}`" >> $GITHUB_STEP_SUMMARY
