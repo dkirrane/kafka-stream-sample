@@ -33,4 +33,9 @@ jobs:
       - name: echo new tag
         run: |
           echo "The current tag is: ${{ steps.tagDryRun.outputs.tag }}"
-          echo "The new tag is:     ${{ steps.tagDryRun.outputs.new_tag }}"          
+          echo "The new tag is:     ${{ steps.tagDryRun.outputs.new_tag }}"
+
+      - name: Create new release branch
+        run: |
+          git checkout -b release-${{ steps.tagDryRun.outputs.new_tag }}
+          git push -u origin release-${{ steps.tagDryRun.outputs.new_tag }}
