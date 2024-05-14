@@ -37,7 +37,7 @@ jobs:
       - name: Create new release branch
         run: |
           NEW_RELEASE_BRANCH=release-${{ steps.new_branch.outputs.next_version }}
-          echo "Creating new release branch: $NEW_RELEASE_BRANCH"
+          echo "Creating new release branch: ${NEW_RELEASE_BRANCH}"
           git checkout -b ${NEW_RELEASE_BRANCH}
           git push -u origin ${NEW_RELEASE_BRANCH}
-          echo "Created new release branch `${NEW_RELEASE_BRANCH}`" >> $GITHUB_STEP_SUMMARY
+          echo "Created new release branch ${NEW_RELEASE_BRANCH}" >> $GITHUB_STEP_SUMMARY
