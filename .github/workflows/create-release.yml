@@ -23,7 +23,7 @@ jobs:
       - name: Get next release branch
         id: new_branch
         run: |
-          LATEST_RELEASE_VERSION=$(git branch -r | grep 'origin/release-' | sort -V | tail -n 1 | sed 's/origin\/release-//')
+          LATEST_RELEASE_VERSION=$(git branch -r | grep 'origin/release-' | sort -V | tail -n 1 | sed 's/origin\/release-//' | tr -d '[:space:]')
           if [ -z "$LATEST_RELEASE_VERSION" ]; then
             echo "No release-* branch found."
             NEXT_RELEASE_VERSION="0.0.0"
