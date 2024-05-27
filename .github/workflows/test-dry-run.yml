@@ -1,0 +1,20 @@
+name: Dry run test
+
+on:
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: 'Enable dry run mode'
+        required: false
+        default: false
+        type: boolean
+
+run-name: ${{ inputs.dry_run == true && '(Dry Run)' || '' }} Starting thing - by @${{ github.actor }}
+
+jobs:
+  Run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
