@@ -9,7 +9,7 @@ on:
         default: false
         type: boolean
 
-run-name: ${{ inputs.dry_run == true && '(Dry Run)' || '' }} Starting thing - by @${{ github.actor }}
+run-name: ${{ inputs.dryRun == true && '(Dry Run)' || '' }} Starting thing - by @${{ github.actor }}
 
 jobs:
   Run:
